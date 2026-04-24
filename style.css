@@ -1,0 +1,1182 @@
+/* ----------------- BODY ----------------- */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #171717;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* ================== OPENING SCREEN (Strictly Inside Canvas) ================== */
+#opening-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 2.2s ease;
+    overflow: hidden;                    /* prevents image spillover */
+}
+
+/* The background image */
+#opening-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;                   /* covers the entire canvas nicely */
+    z-index: 1;                          /* behind the content */
+    image-rendering: pixelated;          /* keeps retro/pixel look if needed */
+}
+
+/* Content on top of the background */
+#opening-content {
+    position: relative;
+    z-index: 2;                          /* on top of the background image */
+    text-align: center;
+}
+
+#opening-title {
+    width: 1350px;
+    max-width: 85%;
+    height: auto;
+    margin-bottom: 30px;
+    image-rendering: pixelated;
+    z-index: 2;
+
+    /* Animation setup */
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);           /* starts completely hidden on the right */
+    animation: titleReveal 2.8s ease-out forwards;
+    animation-delay: 0.4s;                  /* small delay so it doesn't start instantly */
+}
+
+/* Left-to-right wipe + fade-in animation */
+@keyframes titleReveal {
+    to {
+        opacity: 1;
+        clip-path: inset(0 0 0 0);          /* fully revealed */
+    }
+}
+
+
+/* Moving clouds layer - slow continuous left-to-right loop */
+#moving-clouds {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    z-index: 2;                          /* above background, below title & buttons */
+    opacity: 0.25;                       /* slightly transparent so it doesn't overpower */
+    animation: cloudsMove 200s linear infinite;   /* very slow - 180 seconds per loop */
+    pointer-events: none;                /* clicks pass through to buttons */
+}
+
+@keyframes cloudsMove {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(-80%);     /* assumes the image is seamless / wide enough */
+    }
+}
+
+/* Ensure opening content stays on top */
+#opening-content {
+    position: relative;
+    z-index: 3;
+}
+
+/* ================== SPRITE BUTTONS ================== */
+
+#begin-button,
+#about-button {
+    display: block;
+    margin: -25px auto;
+    width: 500px;                    /* adjust size to fit your images */
+    cursor: pointer;
+    transition: transform 0.1s ease;
+    image-rendering: pixelated;
+    user-select: none;
+}
+
+/* Hover State */
+#begin-button:hover {
+    content: url("bgbimage/startbuttonhover.png");
+    transform: scale(1.01);
+}
+
+#about-button:hover {
+    content: url("bgbimage/aboutbuttonhover.png");
+    transform: scale(1.01);
+}
+
+
+/* ================== ABOUT SIDEBAR ================== */
+#about-sidebar {
+    position: fixed;
+    top: 0;
+    right: -500px;
+    width: 400px;
+    height: 100%;
+    background-color: #232423;
+    border-left: 4px solid #39ff14;
+    transition: right 0.5s ease;
+    z-index: 2000;
+    padding: 40px 30px;
+    color: #b3b3b3;
+    font-family: monospace;
+    overflow-y: auto;
+}
+
+#about-sidebar.open {
+    right: 0;
+}
+
+#about-close {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    font-size: 42px;
+    color: #39ff14;
+    cursor: pointer;
+}
+
+/* Main game area */
+#main-game {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* ----------------- TITLE ----------------- */
+h1 {
+    color: #39ff14;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 48px;
+}
+
+h2 {
+    display: block;
+    font-size: 2.0em;
+    margin-block-start: 2.00em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+}
+
+/* ----------------- CANVAS ----------------- */
+#canvas {
+    width: 1280px;
+    height: 720px;
+    background-color: rgb(33, 33, 33);
+    border-color: black;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* ----------------- YGGDRASIL IMAGE ----------------- */
+#yggdrasil {
+    width: 550px;
+    animation: float 3s ease-in-out infinite alternate;
+    position: absolute;
+}
+
+#yggdrasiltwo {
+    width: 550px;
+    animation: float 4s ease-in-out infinite alternate;
+    position: absolute;
+}
+
+/* Floating animation */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+
+/* ----------------- WORLD NODES ----------------- */
+.world {
+    position: absolute;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* ----------------- POSITIONING ----------------- */
+/* Left side worlds */
+#w1 { left: 60px; top: 30px; }
+/* #w2 { left: 60px; top: 250px; } */
+#w3 { left: 60px; top: 350px; }
+
+/* Right side worlds */
+
+/* #w4 { right: 60px; top: 30px; } */
+#w5 { right: 65px; top: 30px; }
+#w6 { right: 60px; top: 350px; }
+
+/* CAPTIONS FOR HOMEPAGE */
+#portal-caption {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: white;
+    font-size: 32px;
+    font-family: monospace;
+
+    background: rgba(0, 0, 0, 0.6);
+    padding: 12px 24px;
+    border-radius: 8px;
+
+    opacity: 0; /* hidden by default */
+    transition: opacity 0.2s ease;
+
+    pointer-events: none; /* doesn't block mouse */
+    z-index: 10;
+}
+
+/* ----------------- FADE OVERLAY ----------------- */
+#fade-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease-in-out;
+    z-index: 100;
+}
+
+/* ----------------- REALM SCENE ----------------- */
+#realm-scene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none; /* hidden initially */
+    overflow: hidden;
+    z-index: 50;
+}
+
+#ground {
+    position: absolute;
+    bottom: 0;
+
+    width: 4000px;
+    height: 100px;
+
+    left: 100%;
+    transform: translateX(-50%);
+
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+
+    z-index: 2;
+}
+
+/* Player */
+#player {
+    position: absolute;
+    bottom: 130px;
+    left: 130px;
+
+    width: 114px;   /* adjust to your sprite size */
+    height: 114px;
+    margin-bottom: -8px;   /* pulls the visual sprite down a bit more */
+
+    background-image: url("bgbimage/mcidle.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    image-rendering: pixelated;
+    transform-origin: center;
+
+    will-change: background-position, transform;
+    backface-visibility: hidden;
+}
+
+
+/* ================== NPCS ================== */
+#polaroid,
+#zenguardian,
+#fisherman {
+    position: absolute;
+    cursor: pointer;
+    z-index: 10;
+    image-rendering: pixelated;
+    transition: transform 0.2s ease;
+}
+
+/* Hover scale effect */
+#polaroid:hover,
+#zenguardian:hover,
+#fisherman:hover {
+    transform: scale(1.01);
+}
+
+/* Individual positioning - tweak after testing */
+#polaroid {
+    left: 380px;
+    bottom: 100px;
+    width: 100px;
+}
+
+#zenguardian {
+    left: 1200px;
+    bottom: 140px;
+    width: 95px;
+}
+
+#fisherman {
+    left: 1280px;
+    bottom: 178px;
+    width: 150px;
+}
+
+/* NPC Dialogue Overlay */
+#npc-dialogue-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);   /* 50% black overlay */
+    display: none;
+    z-index: 150;
+    pointer-events: none;
+}
+
+/* Enlarged NPC Avatar (behind textbox) */
+#npc-avatar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 380px;                    /* enlarged version */
+    z-index: 160;
+    image-rendering: pixelated;
+    display: none;
+    pointer-events: none;
+}
+
+
+/* Back arrow */
+#back-arrow {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 32px;
+    color: white;
+    cursor: pointer;
+}
+
+/* ----------------- PORTAL SPRITES ----------------- */
+
+.portal {
+    width: 500px;
+    height: 500px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    transform-origin: center;           /* ensures rotation happens from the center */
+    z-index: 20;
+}
+
+/* Hover effect: scale up + slow clockwise rotation */
+.portal:hover {
+    transform: scale(1.25) rotate(8deg);   /* gentle rotation while scaled */
+    animation: portalRotate 12s linear infinite;   /* slow continuous clockwise spin */
+}
+
+/* Slow clockwise rotation animation */
+@keyframes portalRotate {
+    from {
+        transform: scale(1.25) rotate(0deg);
+    }
+    to {
+        transform: scale(1.25) rotate(360deg);
+    }
+}
+
+/* HOUSE OBJECT */
+
+#house {
+
+    position: absolute;
+
+    /* Position on right side */
+    right: -100px;
+
+    /* Sit on top of the ground */
+    bottom: 100px;
+
+    /* Default size (can be changed) */
+    width: 820px;
+
+    image-rendering: pixelated;
+
+    /* Layering */
+    z-index: 1;
+
+}
+
+#realm-scene {
+    position: relative;
+}
+
+#ground {
+    z-index: 2;
+}
+
+#player {
+    z-index: 500;
+}
+
+#back-arrow {
+    z-index: 4;
+}
+
+#camera {
+    position: absolute;
+    width: 100%;
+    height: 110%;
+    transform-origin: center;
+}
+
+.platform-debug {
+    position: absolute;
+    background: rgba(255, 0, 0, 0.3);
+    border: 1px solid red;
+
+    z-index: 9999; /* bring to front */
+}
+
+.wall-debug {
+    position: absolute;
+    background: rgba(0, 0, 255, 0.3);
+    border: 1px solid blue;
+}
+
+/* ----------------- TEXTBOX ----------------- */
+#textbox {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+
+    display: none; /* hidden by default */
+
+    z-index: 200; /* above everything */
+    pointer-events: none; /* doesn't block gameplay */
+}
+
+/* Frame image */
+#textbox-frame {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+
+    image-rendering: pixelated; /* 🔥 keeps retro look */
+}
+
+/* Text inside */
+#textbox-text {
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    bottom: 53px;
+
+    color: white;
+    font-size: 18px;
+    font-family: monospace;
+
+    line-height: 1.25;   /* tighter spacing for clean dialogue */
+}
+
+/* Realm of Zen images and buildings*/
+
+#cherryblossom {
+    position: absolute;
+    /* Position on right side */
+    right: 300px;
+    /* Sit on top of the ground */
+    bottom: 99px;
+    /* Default size (can be changed) */
+    width: 350px;
+    image-rendering: pixelated;
+    /* Layering */
+    z-index: 1;
+}
+
+#cherryblossom2 {
+    position: absolute;
+    bottom: 90px;
+    left: 1350px;
+    width: 250px;
+    transform: scaleX(-1);
+    z-index: 1;
+}
+
+#cherryblossom3 {
+    position: absolute;
+    bottom: 90px;
+    left: 900px;
+    transform: scaleX(-1);
+    width: 200px;
+    z-index: 1;
+}
+
+#redshrine {
+    position: absolute;
+
+    /* Position on right side */
+    right: 650px;
+
+    /* Sit on top of the ground */
+    bottom: 100px;
+
+    /* Default size (can be changed) */
+    width: 250px;
+
+    image-rendering: pixelated;
+
+    /* Layering */
+    z-index: 1;
+}
+#woodenshrine {
+    position: absolute;
+
+    /* Position on right side */
+    right: -100px;
+
+    /* Sit on top of the ground */
+    bottom: 100px;
+
+    /* Default size (can be changed) */
+    width: 525px;
+
+    image-rendering: pixelated;
+
+    /* Layering */
+    z-index: 1;
+}
+
+#book {
+    position: absolute;
+    bottom: 335px; /* technically it's top and bottom and stuff but whatever */
+    left: 1000px;
+    width: 64px;
+    cursor: pointer;
+    z-index: 20;
+}
+
+/* ================== ZEN BOOK (World 3) ================== */
+#zenbook {
+    position: absolute;
+    left: 1100px;          /* tweak position to fit nicely in Zen realm */
+    bottom: 129px;         /* sits nicely on the ground / near shrines */
+    width: 64px;
+    cursor: pointer;
+    z-index: 20;
+    image-rendering: pixelated;
+}
+
+/* Hover effect (same as the Frost book) */
+#zenbook:hover {
+    filter: brightness(1.2);   /* optional glow/hover */
+}
+
+/* ================== BOTTOMLESS BOOK (World 5) ================== */
+#bottomlessbook {
+    position: absolute;
+    left: 800px;          /* tweak this to place it nicely near the lighthouse or cabin */
+    bottom: 350px;         /* sits on/above the ground */
+    width: 64px;
+    cursor: pointer;
+    z-index: 20;
+    image-rendering: pixelated;
+}
+
+/* Hover effect */
+#bottomlessbook:hover {
+    filter: brightness(1.2);
+}
+
+/* ================== SKY BOOK (World 6 - High Skies) ================== */
+#skybook {
+    position: absolute;
+    left: 735px;          /* tweak this to place it nicely among the floating islands / skyhouse */
+    bottom: 168px;         /* higher up since it's the High Skies realm */
+    width: 64px;
+    cursor: pointer;
+    z-index: 20;
+    image-rendering: pixelated;
+}
+
+/* Hover effect */
+#skybook:hover {
+    filter: brightness(1.3);   /* slightly stronger glow for sky theme */
+}
+
+/* BOOK UI OVERLAY */
+#book-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.907);
+    z-index: 200;
+}
+
+/* NEW: wrapper for scaling */
+#book-content {
+    transform: scale(1.9); /* 🔥 change this value to scale */
+    transform-origin: center;
+    max-width: none;
+    max-height: none;
+}
+
+#book-content {
+    max-width: 120%;
+    max-height: 120%;
+}
+
+#world1bg {
+    position: absolute;
+    bottom: 0;
+    left: -500px;
+
+    width: 2200px;   /* match your world width */
+    height: 100%;
+
+    object-fit: cover;
+
+    z-index: 0; /* 🔥 BEHIND EVERYTHING */
+}
+
+#world3bg {
+    position: absolute;
+    bottom: -200px;
+    left: -570px;
+
+    transform: scale(0.9); /* 🔥 change this value to scale */
+
+    width: 1500px;
+    height: 500px;
+
+    object-fit: cover;
+
+    z-index: 1;
+}
+
+#world3bg2 {
+    position: absolute;
+    bottom: -200px;
+    left: 500px;
+
+    transform: scale(0.9); /* 🔥 change this value to scale */
+
+    width: 1500px;
+    height: 500px;
+
+    object-fit: cover;
+
+    z-index: 1;
+}
+
+#world3bg3 {
+    position: absolute;
+    bottom: 70px;
+    left: -500px;
+
+    width: 2500px;   /* match your world width */
+    height: 1000px;
+
+    object-fit: cover;
+
+    z-index: 0; /* 🔥 BEHIND EVERYTHING */
+}
+
+#world5bg {
+    position: absolute;
+    bottom: 70px;
+    left: -500px;
+
+    width: 2500px;   /* match your world width */
+    height: 100%;
+
+    object-fit: cover;
+
+    z-index: 0; /* 🔥 BEHIND EVERYTHING */
+}
+
+#world6bg {
+    position: absolute;
+    bottom: -50px;
+    left: -500px;
+
+    width: 2300px;   /* match your world width */
+    height: 100%;
+
+    object-fit: cover;
+
+    z-index: 0; /* 🔥 BEHIND EVERYTHING */
+}
+
+
+#frame1, #frame2 {
+    position: absolute;
+    bottom: 120px;
+    width: 120px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+#frame1 { 
+    left: 796px; 
+    bottom: 185px;
+    width: 100px;
+}
+#frame2 { 
+    left: 920px; 
+    bottom: 420px;
+    width: 100px;
+}
+
+/* ================== FRAME - Fixed layering & visibility ================== */
+#frame-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.9);
+    z-index: 200;
+}
+
+#frame-content-wrapper {
+    position: relative;
+    display: inline-block;
+    transform: scale(1.75);
+    z-index: 10;   /* keeps the whole frame group together */
+}
+
+#frame-projected {
+    position: relative;
+    z-index: 2;    /* official frame on top */
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+#frame-photo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 68%;          /* tweak this % if the photo is too big/small inside the frame */
+    height: auto;
+    z-index: 1000;          /* photo sits behind the frame PNG but visible */
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* ================== BOTTOMLESS FRAME (World 5) ================== */
+#frame3 {
+    position: absolute;
+    left: 740px;          /* tweak to place nicely near lighthouse or cabin */
+    bottom: 350px;         /* sits on the ground */
+    width: 70px;          /* same size as original Frame 2 */
+    cursor: pointer;
+    z-index: 10;
+    image-rendering: pixelated;
+}
+
+/* Hover effect (same as Frame 2) */
+#frame3:hover {
+    filter: brightness(1.15);
+}
+
+/* ================== HIGH SKIES FRAMES (World 6) - Two Frame 1 duplicates ================== */
+#frame4,
+#frame5 {
+    position: absolute;
+    width: 125px;          /* same size as original Frame 1 */
+    cursor: pointer;
+    z-index: 10;
+    image-rendering: pixelated;
+}
+
+/* Individual positioning - tweak these after testing */
+#frame4 {
+    left: 1044px;
+    bottom: 250px;         /* floating higher, suitable for sky theme */
+}
+
+#frame5 {
+    left: 706px;
+    bottom: 250px;         /* different height for nice spacing */
+}
+
+/* Hover effect (same as Frame 1) */
+#frame4:hover,
+#frame5:hover {
+    filter: brightness(1.15);
+}
+
+/* ================== BOOK - Fixed layering & close button position ================== */
+#book-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.907);
+    z-index: 200;
+}
+
+#book-page-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+#book-page-photo {
+    width: 42%;          /* tweak this % to fit nicely inside the book's page area */
+    height: auto;
+    object-fit: contain;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    max-width: 100%;
+    max-height: 100%;
+    z-index: 1000;
+}
+
+/* ================== CUSTOM BOOK ARROWS (using images) ================== */
+#book-left-arrow,
+#book-right-arrow {
+    position: absolute;
+    top: 48%;
+    cursor: pointer;
+    z-index: 20;                    /* above page photo but below close */
+    user-select: none;
+    visibility: hidden;             /* controlled by JS */
+    transition: transform 0.2s ease;
+    transform: scale(1.9);          /* matches your book scaling */
+    pointer-events: auto;
+}
+
+#book-left-arrow {
+    left: 18%;
+    width: 40px;                    /* adjust size as needed */
+    height: auto;
+}
+
+#book-right-arrow {
+    right: 18%;
+    width: 40px;                    /* adjust size as needed */
+    height: auto;
+}
+
+/* Hover effect for custom arrow images */
+#book-left-arrow:hover,
+#book-right-arrow:hover {
+    transform: scale(2.2);          /* bigger on hover, like before */
+    filter: brightness(1.2);        /* optional: makes them pop a bit more */
+}
+
+/* Optional: make arrows slightly transparent when inactive (when hidden by JS they stay hidden) */
+#book-left-arrow, #book-right-arrow {
+    opacity: 0.85;
+}
+
+#book-left-arrow:hover, 
+#book-right-arrow:hover {
+    opacity: 1;
+}
+
+/* ================== CLOSE BUTTON - Force it on top of everything ================== */
+#book-close,
+#frame-close {
+    position: absolute;
+    top: 30px;
+    right: 1200px;        /* moved to top-right so it's clearly different */
+    font-size: 48px;
+    color: white;
+    cursor: pointer;
+    z-index: 300;
+    line-height: 1;
+}
+
+/* ================== LIGHTHOUSE - Realm of the Bottomless ================== */
+#lighthouse {
+    position: absolute;
+    
+    /* Position on the ground (tweak these values after testing) */
+    left: -120px;           /* horizontal position - move left/right */
+    bottom: 0px;          /* sits on the ground */
+    
+    /* Size - adjust to your image */
+    width: 500px;
+    
+    image-rendering: pixelated;   /* keeps retro pixel look */
+    z-index: 1;                   /* above ground, below player */
+}
+
+/* ================== SKYLANDS - Realm of the High Skies ================== */
+#skyland1,
+#skyland2,
+#skyland3,
+#skyland4 {
+    position: absolute;
+    image-rendering: pixelated;
+    z-index: 1;                    /* above ground/background, below player */
+}
+
+/* Individual positioning - tweak these values after testing */
+#skyland1 {
+    left: -500px;
+    bottom: -30px;   /* higher up in the sky */
+    width: 500px;
+}
+
+#skyland2 {
+    left: 100px;
+    bottom: -120px;   /* floating higher */
+    width: 600px;
+}
+
+#skyland3 {
+    left: 1200px;
+    bottom: 100px;
+    width: 350px;
+}
+
+#skyland4 {
+    left: 265px;
+    bottom: 50px;
+    width: 140px;
+}
+
+#islandcabin {
+    position: absolute;
+
+    /* Position on right side */
+    right: -100px;
+
+    /* Sit on top of the ground */
+    bottom: 100px;
+
+    /* Default size (can be changed) */
+    width: 1000px;
+
+    image-rendering: pixelated;
+
+    /* Layering */
+    z-index: 1;
+}
+
+#skyhouse {
+    position: absolute;
+
+    /* Position on right side */
+    right: -50px;
+
+    /* Sit on top of the ground */
+    bottom: 100px;
+
+    /* Default size (can be changed) */
+    width: 720px;
+
+    image-rendering: pixelated;
+
+    /* Layering */
+    z-index: 1;
+}
+
+/* ================== THEMED PORTAL GATEWAYS (Back to Homepage) ================== */
+#gateway1, /* Frost */
+#gateway3, /* Zen */
+#gateway5, /* Bottomless */
+#gateway6 { /* High Skies */
+    position: absolute;
+    top: 442px;
+    left: -300px;
+    cursor: pointer;
+    z-index: 1;                    /* high enough to be clickable but below overlays */
+    transition: transform 0.25s ease;
+    image-rendering: pixelated;
+    width: 300px;                    /* adjust size to look good */
+}
+
+/* Hover effect */
+#gateway1:hover,
+#gateway3:hover,
+#gateway5:hover,
+#gateway6:hover {
+    transform: scale(1.005);
+}
+
+/* ================== TITLE IMAGE ================== */
+#title-image {
+    display: block;
+    margin: 50px auto 20px auto;   /* centers it and adds nice spacing */
+    width: 700px;                  /* adjust this size to fit your image nicely */
+    max-width: 100%;                /* responsive on smaller screens */
+    image-rendering: pixelated;    /* keeps the retro/pixel look */
+    z-index: 10;
+}
+
+
+/* ================== GAME CAPTION BELOW CANVAS ================== */
+#game-caption {
+    color: #39ff14;                    /* matches your retro green theme */
+    font-family: monospace;
+    font-size: 18px;
+    text-align: left;
+    margin: 40px auto 40px auto;
+    max-width: 1280px;
+    line-height: 5.0;
+    text-shadow: 0 0 8px rgba(57, 255, 20, 0.4);   /* subtle glow */
+}
+
+
+/* ================== OFFICIAL FRAME CONTAINER ================== */
+#frame-container {
+    position: relative;
+    width: 1280px;
+    height: 720px;
+    margin: 20px auto;           /* centers the whole framed canvas */
+    display: inline-block;
+}
+
+/* The frame image */
+#official-frame {
+    position: absolute;
+    top: -26px;
+    left: -45px;
+    width: 106%;
+    height: 110%;
+    pointer-events: none;        /* clicks pass through to the canvas */
+    z-index: 1000;                  /* behind the canvas */
+    image-rendering: pixelated;
+}
+
+/* The canvas sits on top of the frame */
+#canvas {
+    position: relative;
+    width: 1280px;
+    height: 720px;
+    z-index: 2;                  /* on top of the frame */
+    background-color: rgb(33, 33, 33);
+    overflow: hidden;
+}
+
+
+/* ================== CENTRAL CAPTION (Inside Canvas - Front & Center) ================== */
+#central-caption {
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;                  /* adjust to fit your caption images perfectly */
+    max-width: 85%;
+    z-index: 15;                   /* on top of yggdrasil and portals, but below UI overlays */
+    image-rendering: pixelated;
+    pointer-events: none;          /* allows clicks on portals underneath */
+    transition: opacity 0.25s ease;
+}
+
+
+/* ================== SIMPLE NPC DIALOGUE OVERLAY (Minimal Version) ================== */
+
+#npc-dialogue-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);   /* 50% black - this is what you want */
+    display: none;
+    z-index: 175;                     /* behind textbox (z=200) */
+    pointer-events: auto;
+}
+
+#npc-close {
+    position: absolute;
+    top: 30px;
+    left: 40px;                       /* upper left, like book close */
+    font-size: 48px;
+    color: white;
+    cursor: pointer;
+    z-index: 300;                     /* on top of everything */
+    line-height: 1;
+    user-select: none;
+}
+
+#npc-close:hover {
+    color: #39ff14;
+}
+
+
+/* ================== NPC DIALOGUE - Enlarged Avatar ================== */
+
+#npc-avatar {
+    position: absolute;
+    top: 60%;                    /* slightly above center so it sits nicely behind textbox */
+    left: 75%;
+    transform: translate(-50%, -50%);
+    width: 350px;                /* enlarged size - adjust if needed */
+    z-index: 170;                /* behind textbox (z=200), above overlay */
+    image-rendering: pixelated;
+    display: none;
+    pointer-events: none;        /* clicks pass through to overlay */
+}
+

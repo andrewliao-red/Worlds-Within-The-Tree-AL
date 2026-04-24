@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worlds Within the Tree</title>
+
+<!-- Link to external CSS -->
+<link rel="stylesheet" href="style.css">
+
+<!-- Link to external JS -->
+<script src="script.js" defer></script>
+</head>
+
+<body>
+
+<img src="bgbimage/1title.png" id="title-image" alt="Worlds Within the Tree">
+
+<!-- Official Frame surrounding the canvas -->
+<div id="frame-container">
+    <img src="bgbimage/OfficialFrame.png" id="official-frame">
+
+    <div id="canvas">
+
+        <!-- Click Sound Effect -->
+        <audio id="clickSound">
+            <source src="bgbimage/music/click.mp3" type="audio/mpeg">
+        </audio>
+
+        <!-- Opening Screen -->
+        <div id="opening-screen">
+            <img id="opening-background" src="bgbimage/homepagebackground.png" alt="Opening Background">
+            <!-- Moving clouds layer -->
+            <img id="moving-clouds" src="bgbimage/cloudsmoving.png" alt="Moving Clouds">
+            <div id="opening-content">
+                
+                <div id="opening-content">
+                    <img id="opening-title" src="bgbimage/ingametitle.png" alt="Worlds Within the Tree">
+                    
+                    <!-- Start Button as Image -->
+                    <img id="begin-button" 
+                        src="bgbimage/startbuttonidle.png" 
+                        alt="Begin the Journey">
+
+                    <!-- About Button as Image -->
+                    <img id="about-button" 
+                        src="bgbimage/aboutbuttonidle.png" 
+                        alt="About">
+
+                </div>
+            </div>
+        </div>
+
+            <!-- Background Music Players (hidden) -->
+        <audio id="homepageMusic" loop>
+            <source src="bgbimage/music/homepage.mp3" type="audio/mpeg">
+        </audio>
+
+        <audio id="world1Music" loop>
+            <source src="bgbimage/music/world1theme.mp3" type="audio/mpeg">
+        </audio>
+
+        <!-- World 1 Ambient Snow Sound -->
+        <audio id="world1SnowSound" loop>
+            <source src="bgbimage/music/snowbackground.mp3" type="audio/mpeg">
+        </audio>
+
+        <audio id="world3Music" loop>
+            <source src="bgbimage/music/world3theme.mp3" type="audio/mpeg">
+        </audio>
+
+        <audio id="world5Music1">
+            <source src="bgbimage/music/world5theme1.mp3" type="audio/mpeg">
+        </audio>
+
+        <audio id="world5Music2" loop>
+            <source src="bgbimage/music/world5theme2.mp3" type="audio/mpeg">
+        </audio>
+
+        <!-- World 5 Ambient Waves Sound -->
+        <audio id="world5WavesSound" loop>
+            <source src="bgbimage/music/wavesbackground.mp3" type="audio/mpeg">
+        </audio>
+
+        <audio id="world6Music" loop>
+            <source src="bgbimage/music/world6theme.mp3" type="audio/mpeg">
+        </audio>
+
+        <!-- Typewriter Text Sound -->
+        <audio id="typewriterSound" loop>
+            <source src="bgbimage/music/gametextsound1.mp3" type="audio/mpeg">
+        </audio>
+
+
+        <div id="textbox">
+            <img src="bgbimage/retroframe.png" id="textbox-frame">
+            <div id="textbox-text">Welcome...</div>
+        </div>
+
+            <!-- BOOK UI - Fixed -->
+        <div id="book-ui">
+            <img id="book-content" src="bgbimage/readingbook.png">
+        
+            <!-- Container for the single dynamic page image -->
+            <div id="book-page-container">
+                <img id="book-page-photo" src="" alt="">
+            </div>
+        
+            <!-- Minecraft-style page-turn arrows -->
+            <img id="book-left-arrow" src="bgbimage/bookarrowL.png" alt="Previous Page">
+            <img id="book-right-arrow" src="bgbimage/bookarrowR.png" alt="Next Page">
+        
+            <div id="book-close">×</div>
+        </div>
+
+        <!-- FRAME UI - Fixed (frame-projected stays as the official frame) -->
+        <div id="frame-ui">
+            <div id="frame-content-wrapper">
+                <!-- Official framing (NEVER removed) -->
+                <img id="frame-projected" src="" alt="">
+                <!-- Official photo centered & masked inside the frame -->
+                <img id="frame-photo" src="" alt="Official Photo">
+            </div>
+            <div id="frame-close">&#8592;</div>
+        </div>
+
+        <!-- Left Side Worlds -->
+        <div class="world" id="w1">
+        <img class="portal" src="bgbimage/realm_frost.png" 
+            alt="Realm of Frost" 
+            style="width: 300px; height: 300px;">
+        </div>
+
+        <!--
+        <div class="world" id="w2">
+            <img class="portal" src="bgbimage/BGB_RealmSprite2-1.png" 
+            alt="Realm of the Jade Mountains"
+            style="width: 220px; height: 220px;">
+    </div>
+    -->
+
+    <div class="world" id="w3">
+        <img class="portal" src="bgbimage/realm_zen.png" 
+        alt="Realm of Zen"
+        style="width: 300px; height: 300px;" >
+    </div>
+
+    <!-- Right Side Worlds -->
+
+    <!--
+    <div class="world" id="w4">
+        <img class="portal" src="bgbimage/BGB_RealmSprite4-1.png" 
+        alt="Realm of Thinoporo"
+        style="width: 220px; height: 220px;" >
+    </div>
+    -->
+
+    <div class="world" id="w5">
+        <img class="portal" src="bgbimage/realm_bottomless.png" 
+        alt="Realm of the Bottomless"
+        style="width: 300px; height: 300px;" >
+    </div>
+
+    <div class="world" id="w6">
+        <img class="portal" src="bgbimage/realm_highsky.png" 
+        alt="Realm of the High Skies"
+        style="width: 300px; height: 300px;">
+    </div>
+
+    <!-- Yggdrasil homepage -->
+    <img src="bgbimage/yggdrasil.png" alt="Yggdrasil World Tree" id="yggdrasil">
+    <img src="bgbimage/yggdrasil2.png" alt="Yggdrasil World Tree" id="yggdrasiltwo">
+
+    <!-- Central Caption - Inside Canvas, Front & Center -->
+    <img id="central-caption" src="bgbimage/captionblank.png" alt="Realm Caption">
+
+    <!-- Black overlay -->
+    <div id="fade-overlay"></div>
+
+    <!-- This'll be stuff inside the canvas such as houses, player,s npcs, trees etc. -->
+    <div id="realm-scene">
+
+        <div id="camera">
+
+            <img id="world1bg" src="bgbimage/world1background.png">
+            <img id="world3bg" src="bgbimage/zenbackground1.png">
+            <img id="world3bg2" src="bgbimage/zenbackground1.png">
+            <img id="world6bg" src="bgbimage/zensky.png">
+            <img id="world3bg3" src="bgbimage/world3zenbackground.png">
+            <img id="world5bg" src="bgbimage/world5bottomless.png">
+
+            <div id="background-layer"></div>
+
+            <img id="house" src="bgbimage/House1.png" alt="House Interior">
+
+            <!-- Add this line inside <div id="camera"> ... </div> -->
+            <img id="lighthouse" src="bgbimage/lighthouse.png" alt="Lighthouse">
+
+            <img id="islandcabin" src="bgbimage/world5house.png">
+
+            <img id="skyland1" src="bgbimage/island1.png">
+            <img id="skyland2" src="bgbimage/island2.png">    
+            <img id="skyland3" src="bgbimage/island3.png">   
+            <img id="skyland4" src="bgbimage/island4.png">     
+            <img id="skyhouse" src="bgbimage/skyhouse.png">
+
+            <div id="ground"></div>
+
+            <div id="player"></div>
+
+
+            <!-- NPCs -->
+
+            <!-- Polaroid NPC - World 1 (Realm of Frost) -->
+            <img id="polaroid" src="bgbimage/polarbearnpc.png" alt="Polaroid">
+
+            <!-- Zen Guardian NPC - World 3 (Realm of Zen) -->
+            <img id="zenguardian" src="bgbimage/monknpc.png" alt="Zen Guardian">
+
+            <!-- Fisherman NPC - World 5 (Realm of the Bottomless) -->
+            <img id="fisherman" src="bgbimage/fishermannpc.png" alt="Fisherman">
+
+
+            <img id="book" src="bgbimage/Book.png">
+
+            <!-- NEW: Zen Realm Book (World 3) -->
+            <img id="zenbook" src="bgbimage/Book.png" alt="Zen Book">
+
+            <img id="bottomlessbook" src="bgbimage/Book.png" alt="Bottomless Book">
+
+            <!-- NEW: Duplicate Frame for World 5 (Bottomless) -->
+            <img id="frame3" src="bgbimage/PictureFrameV2-1.png" alt="Bottomless Frame">
+
+            <!-- NEW: Two Frame 1 duplicates for World 6 (High Skies) -->
+            <img id="frame4" src="bgbimage/PictureFrame1.png" alt="High Skies Frame 1">
+            <img id="frame5" src="bgbimage/PictureFrame1.png" alt="High Skies Frame 2">
+
+            <!-- NEW: Sky Book (World 6 - High Skies) -->
+            <img id="skybook" src="bgbimage/Book.png" alt="Sky Book">
+
+            <img id="frame1" src="bgbimage/PictureFrame1.png">
+            <img id="frame2" src="bgbimage/PictureFrameV2-1.png">
+
+            <img id="cherryblossom" src="bgbimage/cherryblossom1.png">
+            <img id="cherryblossom2" src="bgbimage/cherryblossom1.png">
+            <img id="cherryblossom3" src="bgbimage/cherryblossom1.png">
+
+            <img id="redshrine" src="bgbimage/redshrine.png">
+            <img id="woodenshrine" src="bgbimage/woodenshrine.png">
+
+            <!-- Themed Portal Gateways (replace old back arrow) -->
+            <img id="gateway1" src="bgbimage/portalgateway1.png" alt="Return from Realm of Frost">
+            <img id="gateway3" src="bgbimage/portalgateway3.png" alt="Return from Realm of Zen">
+            <img id="gateway5" src="bgbimage/portalgateway5.png" alt="Return from Realm of the Bottomless">
+            <img id="gateway6" src="bgbimage/portalgateway6.png" alt="Return from Realm of the High Skies">
+
+        </div>
+
+        <!-- NPC Dialogue Overlay -->
+        <div id="npc-dialogue-overlay">
+            <img id="npc-avatar" src="" alt="NPC Avatar">
+            <div id="npc-close">×</div>
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- Caption below the canvas -->
+<p id="game-caption">Use WASD to move. Click on the books and frames that glow to get a closeup.</p>
+
+<!-- About Sidebar (hidden at start) -->
+    <div id="about-sidebar">
+        <div id="about-content">
+            <div id="about-close">←</div>
+            <h2>About The Journey</h2>
+            <p>Worlds Within the Tree is a digital, exploratory archive that invites users to navigate and 
+                engage with a collection of pieces through familiar, game-based interaction. 
+                <br></br>
+                Rather than presenting archival material in a static or purely-informational format, 
+                the project reimagines the archive as an interactive, living, and navigable environment—one that encourages movement, 
+                discovery, and personal interpretation.
+                <br></br>
+                Structured as a series of interconnected “realms,” each space functions as both a container and a lens, 
+                framing different forms of media, ideas, and narratives. The yggdrasil tree serves as a central metaphor: 
+                a growing, branching system of memory, knowledge, and experience. Just as a tree expands outward through its 
+                branches, the archive extends through these worlds, allowing users to move between them in a non-linear 
+                and exploratory way.
+                <br></br>
+                By combining principles of game design with archival thinking, Worlds Within the Tree 
+                challenges traditional expectations of how collections are accessed and understood. 
+                It shifts the role of the user from a passive viewer to an active participant, where interaction becomes a 
+                method of reading, and navigation becomes a form of interpretation.
+                <br></br>
+                <br></br>
+                Made by Andrew Liao
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>
