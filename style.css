@@ -511,7 +511,7 @@ h2 {
     position: absolute;
     left: 40px;
     right: 40px;
-    bottom: 53px;
+    bottom: 65px;
 
     color: white;
     font-size: 18px;
@@ -1168,15 +1168,61 @@ h2 {
 
 /* ================== NPC DIALOGUE - Enlarged Avatar ================== */
 
+/* Update your avatar style to ensure it doesn't block clicks */
 #npc-avatar {
     position: absolute;
-    top: 60%;                    /* slightly above center so it sits nicely behind textbox */
+    top: 60%;
     left: 75%;
     transform: translate(-50%, -50%);
-    width: 350px;                /* enlarged size - adjust if needed */
-    z-index: 170;                /* behind textbox (z=200), above overlay */
+    width: 350px;
+    z-index: 170; 
     image-rendering: pixelated;
     display: none;
-    pointer-events: none;        /* clicks pass through to overlay */
+    /* CRITICAL: This allows mouse clicks to pass THROUGH the 
+       transparent parts of the avatar image to the buttons below */
+    pointer-events: none; 
 }
 
+
+/* ================== DIALOGUE BUTTONS ================== */
+/* Ensure the container is above the textbox frame and text */
+#dialogue-choices-container {
+    position: absolute;
+    bottom: 15px;
+    left: 30px;
+    right: 30px;
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+    /* Higher than the textbox-frame and textbox-text */
+    z-index: 210; 
+    /* Ensure the container itself doesn't block background clicks 
+       but allows buttons to be clicked */
+    pointer-events: auto; 
+}
+
+.dialogue-btn {
+    background-color: rgba(0, 0, 0, 0.8); /* Darker for better contrast */
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    text-align: center;
+    flex: 1;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    /* Make sure buttons are interactive */
+    pointer-events: auto; 
+}
+
+.dialogue-btn:hover {
+    background-color: #ffffff;
+    color: #000000;
+    transform: translateY(-3px); /* Button lifts up slightly when hovered */
+    box-shadow: 0 6px 12px rgba(255, 255, 255, 0.4);
+    z-index: 1000;
+}

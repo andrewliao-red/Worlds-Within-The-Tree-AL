@@ -716,8 +716,8 @@ function loadRealmPlatforms(realmId) {
         addPlatform(600, 90, 700, 20, false);
         addPlatform(600, 90, 700, 30, false);
 
-        addWall(650, 240, 30, 120, false);
-        addWall(1200, 240, 30, 120, false);
+        //addWall(650, 240, 30, 120, false);
+        //addWall(1200, 240, 30, 120, false);
         
         addPlatform(850, 135, 50, 10, true);
         addPlatform(870, 146, 50, 10, true);
@@ -1072,38 +1072,268 @@ bookRightArrow.addEventListener("click", (e) => {
 const npcDialogueOverlay = document.getElementById("npc-dialogue-overlay");
 const npcAvatar = document.getElementById("npc-avatar");
 const npcClose = document.getElementById("npc-close");
+const dialogueChoicesContainer = document.getElementById("dialogue-choices-container"); // NEW
 
 let typeTimeout = null;
-let isNpcDialogueOpen = false;   // ← NEW GUARD FLAG
+let isNpcDialogueOpen = false;
 
-// Different introductory text per NPC
-const npcIntroText = {
-    "Polaroid": "  Hello traveler... the frost bites deep today, even for me. The sun hasn't shone here in years.",
-    "Zen Guardian": "  Peace be with you, seeker. The path to enlightenment is quiet... yet filled with wonder. I am the guardian of this realm.",
-    "Fisherman": "  Ah, another fellow friend... The waters here are endless... much like our stories. You won't find anyone else here."
+// The Dialogue Dictionary: Stores the intro, choices, and responses for each NPC
+const dialogueTree = {
+    "Polaroid": {
+        intro: "  Hello traveler... the frost bites deep today, even for me. The sun hasn't shone here in years.",
+        choices: [
+            {
+                text: "Nice to meet you.",
+                response: "  Much applies. You don't look like you from around these parts. Especially with that outfit you have. Doesn't look like there's much fur.",
+                nextChoices: [
+                    { 
+                        text: "I prefer clothes to fur.", 
+                        response: "  Thin-skin talk. Clothes don't grow back when the ice-teeth bite. You stay out too long, you become a 'siclesicle'.",
+                        nextChoices: [
+                            { text: "What's a siclesicle?", response: "  Is when blood stop running and start standing still. Very quiet. Very blue. I seen many birds go siclesicle mid-air." },
+                            { text: "I'll be careful.", response: "  Good. If you freeze, I not move you. You heavy. Like big rock, but with shoes." }
+                        ]
+                    }
+                ]
+            },
+            {
+                text: "Who are you?",
+                response: "  Humankind call me the 'Polaroid' because I'm a polar bear and I walk on my hind legs unlike my kin. Funny, because I don't carry a camera.",
+                nextChoices: [
+                    { 
+                        text: "Why walk on two legs?", 
+                        response: "  The Man in Metal Mask taught me. Say it keeps the nose high, away from the ground-breath. Ground-breath is where the rot lives.",
+                        nextChoices: [
+                            { 
+                                text: "The Man in the Metal Mask?", 
+                                response: "  My bestest 'not-bear'. He made this wood-cave. He smell like old iron and dry meat. Good smells.",
+                                nextChoices: [
+                                    { text: "Where did he go?", response: "  Walked into the White Wall. Said he go hunt the 'Great Tusk'. That was many moons... maybe many suns. I lost count after ten." },
+                                    { text: "Was he a hunter?", response: "  The best. He once fought a wolf with only a spoon. I watched. I ate the wolf after. Spoon was shiny." }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                text: "Are you guarding this house?",
+                response: "  Yep! The man who built this house is a good friend of mine who went on a hunting trip. I'm standing guard to make sure no tribesmen try and ransack this place.",
+                nextChoices: [
+                    { 
+                        text: "Who are these tribesmen?", 
+                        response: "  The Spear-Singers. They come when the wind whistles low. They want the 'Hot-Box' inside the wood-cave.",
+                        nextChoices: [
+                            { 
+                                text: "The Hot-Box? You mean the fireplace?", 
+                                response: "  Yes! The orange-flower that eats wood and spits out 'not-cold'. Tribesmen want to steal it. Put it in bags. Very stupid.",
+                                nextChoices: [
+                                    {
+                                        text: "Fire can't be put in a bag.",
+                                        response: "  I know this! I am bear! But Spear-Singers think they can. They try to come inside, I give them the 'Heavy-Hand'.",
+                                        nextChoices: [
+                                            { text: "The Heavy-Hand?", response: "  Is my paw. But fast. Very, very fast. They go 'oof' and then they go away." }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        text: "Is the Man coming back?",
+                        response: "  Sky-water says yes. Wind-whisper says no. I listen to the Sky-water. It more wet. More real.",
+                        nextChoices: [
+                            { text: "I hope he returns soon.", response: "  He will. He left his extra spoon. Nobody leaves a shiny spoon forever." }
+                        ]
+                    }
+                ]
+            }
+        ] 
+    },
+    "Zen Guardian": {
+        intro: "  Peace be with you, seeker. The path to enlightenment is quiet... yet filled with wonder. I am the guardian of this realm.",
+        choices: [
+            {
+                text: "Nice to meet you.",
+                response: "  The pleasure is mine. May your steps through this realm bring you clarity.",
+                nextChoices: [
+                    { 
+                        text: "What is this place?", 
+                        response: "  This is the Realm of Zen. Here, the noise of the world fades into a single, perfect note.",
+                        // --- NEW PERMUTATION 1 ---
+                        nextChoices: [
+                            { text: "I don't hear any notes.", response: "  It's figurative. It's a way of listening to the winds here. Given that it's your first time here, it makes sense you have yet to truly understand." },
+                            { text: "It's too quiet for me.", response: "  Silence is a mirror. Perhaps you are simply startled by what you see in it." }
+                        ]
+                    },
+                    { text: "You seem very calm.", response: "  Calmness is not the absence of storm, but the peace found within the eye of it." },
+                    { text: "I'll be going now.", response: "  Very well then. May the winds guide you on your travels. Until we meet again." }
+                ]
+            },
+            {
+                text: "How long have you been here?",
+                response: "  Time holds no meaning under the cherry blossoms. I simply exist, as do the trees.",
+                nextChoices: [
+                    { 
+                        text: "Do the trees talk?", 
+                        response: "  They speak in the language of falling petals and shifting shadows. One only needs to listen.",
+                        // --- NEW PERMUTATION 2 ---
+                        nextChoices: [
+                            { text: "Teach me to listen.", response: "  First, stop trying to hear. The truth arrives only when the ego stops shouting." },
+                            { text: "I prefer actual words.", response: "  Words are but shadows of things. I prefer the things themselves." }
+                        ]
+                    },
+                    { text: "Doesn't it get lonely?", response: "  Solitude is a full house when you are at peace with the guest in your own mind." },
+                    { text: "That sounds boring.", response: "  Boredom is merely the soul's hunger for a truth it has not yet recognized." }
+                ]
+            },
+            {
+                text: "You ever get tired?",
+                response: "  To be tired is to resist the flow of the river. I merely drift along its currents.",
+                nextChoices: [
+                    { 
+                        text: "Where does the river go?", 
+                        response: "  It flows toward the Great Sea of Consciousness, where all drops of water eventually meet.",
+                        // --- NEW PERMUTATION 3 ---
+                        nextChoices: [
+                            { text: "Will I meet you there?", response: "  We are already there. We just haven't noticed the salt on our skin yet." },
+                            { text: "I'm afraid of drowning.", response: "  You cannot drown in a sea that you are made of. Relax your limbs." }
+                        ]
+                    },
+                    { text: "I wish I could drift like that.", response: "  The secret is to let go of the oars. The current already knows the way." },
+                    { text: "Sounds like a lot of work.", response: "  Non-action is the most difficult skill to master, yet it yields the greatest harvest." }
+                ]
+            }
+        ]
+    },
+    "Fisherman": {
+        intro: "  Ah, another fellow friend... The waters here are endless... much like our stories. You won't find anyone else here but me.",
+        choices: [
+            {
+                text: "Why are you all alone here?",
+                response: "  Alone? No, seeker. I am merely the only one with legs that walk on dust. The rest... stay below.",
+                nextChoices: [
+                    { 
+                        text: "What stays below?", 
+                        response: "  Ancient things. Beings that remember when the stars were first lit. They don't care for the surface.",
+                        nextChoices: [
+                            { 
+                                text: "Are they dangerous?", 
+                                response: "  Danger is a human word. To the sea monsters, we are just tiny bubbles rising to a ceiling they cannot reach.",
+                                nextChoices: [
+                                    {
+                                        text: "Have you seen one?",
+                                        response: "  Once. A scale the size of my cottage broke the surface. It was blue... like a dying flame.",
+                                        nextChoices: [
+                                            {
+                                                text: "Why stay so close to them?",
+                                                response: "  Because the deeper the water, the more it holds. And I am waiting for it to give something back.",
+                                                nextChoices: [{ text: "What are you waiting for?", response: "  My boy. He thought he could outrun the horizon in a wooden boat." }]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    { 
+                        text: "Is there really no other land?", 
+                        response: "  Maps are a lie here. There is only the Island of the Secluded, and then... the Infinite Salt.",
+                        nextChoices: [
+                            {
+                                text: "How do you survive?",
+                                response: "  The sea is a generous mother, if you don't mind the taste of brine and silence.",
+                                nextChoices: [
+                                    {
+                                        text: "Silence can be heavy.",
+                                        response: "  It is. Especially at night, when the oars of a ghost-boat don't make a sound."
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                text: "Why do you sit on this balcony?",
+                response: "  To keep the lantern of my eyes burning. If I blink, I might miss the silhouette of a sail.",
+                nextChoices: [
+                    {
+                        text: "Are you expecting someone?",
+                        response: "  My son. A boy with a heart too large for a small island. He believed the world had a rim.",
+                        nextChoices: [
+                            {
+                                text: "When did he leave?",
+                                response: "  Many tides ago. I was asleep... dreaming of calm winds. I woke to an empty dock and a quiet house.",
+                                nextChoices: [
+                                    {
+                                        text: "Do you think he's okay?",
+                                        response: "  The boy was passionate. But the aquatic ancients... they don't value passion. They value weight.",
+                                        nextChoices: [
+                                            {
+                                                text: "You think a monster got him?",
+                                                response: "  I think the water is heavy. But he was strong. He took my best oars and my only compass.",
+                                                nextChoices: [{ text: "He'll come back.", response: "  That is why I sit. That is why I never move my chair. I must be the first thing he sees." }]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                text: "Tell me about the sea monsters.",
+                response: "  They aren't monsters to themselves. We are the intruders on their liquid sky.",
+                nextChoices: [
+                    {
+                        text: "Are they watching us?",
+                        response: "  Always. Beneath your feet, a thousand eyes are tracking your heartbeat in the water.",
+                        nextChoices: [
+                            {
+                                text: "That's terrifying.",
+                                response: "  Only if you fear the end of your own story. To me, it is just company.",
+                                nextChoices: [
+                                    {
+                                        text: "Did your son fear them?",
+                                        response: "  He called them 'The Great Whisperers'. He thought they were calling his name. One night... he answered.",
+                                        nextChoices: [
+                                            {
+                                                text: "He followed the monsters?",
+                                                response: "  He followed the music they make by grinding their teeth against the ocean floor. A terrible, beautiful song."
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
 };
 
 // Typewriter with sound effect
 function typeWriter(text, callback) {
     if (typeTimeout) clearTimeout(typeTimeout);
     
-    textboxText.textContent = "";   // clear immediately
+    textboxText.textContent = ""; 
     let i = 0;
     
-    // Start typewriter sound
     typewriterSound.currentTime = 0;
-    typewriterSound.volume = 0.7;     // adjust volume to taste (0.3–0.6 is good)
+    typewriterSound.volume = 0.7;     
     typewriterSound.play().catch(() => {});
 
     function type() {
         if (i < text.length) {
             textboxText.textContent += text.charAt(i);
             i++;
-            typeTimeout = setTimeout(type, 35);
+            typeTimeout = setTimeout(type, 15);
         } else {
-            // Typing finished → stop sound
             typewriterSound.pause();
-            if (callback) callback();
+            if (callback) callback(); // Trigger choices after typing finishes
         }
     }
     type();
@@ -1111,27 +1341,92 @@ function typeWriter(text, callback) {
 
 // Open NPC dialogue
 function openNpcDialogue(npcName, npcImageSrc) {
-    isNpcDialogueOpen = true;                     // ← GUARD ON
+    isNpcDialogueOpen = true; 
+    
+    // NEW: Stop any realm message fade immediately so it doesn't eat NPC text
+    if (realmMessageTimeout) {
+        clearTimeout(realmMessageTimeout);
+        realmMessageTimeout = null;
+    }
+
     npcDialogueOverlay.style.display = "block";
     npcAvatar.src = npcImageSrc;
     npcAvatar.style.display = "block";
+    
+    dialogueChoicesContainer.style.display = "none";
+    dialogueChoicesContainer.innerHTML = "";
 
-    const introText = npcIntroText[npcName] || "Hello traveler...";
-    typeWriter(introText);                        // ← starts clean
+    const npcData = dialogueTree[npcName];
+    const introText = npcData ? npcData.intro : "Hello traveler...";
+    
+    typeWriter(introText, () => {
+        if (npcData && npcData.choices && npcData.choices.length > 0) {
+            showDialogueChoices(npcData.choices);
+        }
+    });
+}
+
+// Show the interactive buttons
+function showDialogueChoices(choicesArray) {
+    dialogueChoicesContainer.innerHTML = ""; 
+    
+    choicesArray.forEach(choice => {
+        const btn = document.createElement("div");
+        btn.className = "dialogue-btn";
+        btn.innerText = choice.text;
+        
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation(); 
+            e.stopImmediatePropagation();
+
+            dialogueChoicesContainer.style.display = "none";
+            isNpcDialogueOpen = true; 
+
+            typeWriter(choice.response, () => {
+                // Check if this choice leads to MORE choices (Branching)
+                if (choice.nextChoices && choice.nextChoices.length > 0) {
+                    showDialogueChoices(choice.nextChoices); // Recursively show new buttons
+                } else {
+                    // Standard Farewell if it's the end of the line
+                    dialogueChoicesContainer.innerHTML = "";
+                    const endBtn = document.createElement("div");
+                    endBtn.className = "dialogue-btn";
+                    endBtn.innerText = "Farewell.";
+                    
+                    endBtn.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        closeNpcDialogue();
+                    });
+                    
+                    dialogueChoicesContainer.appendChild(endBtn);
+                    dialogueChoicesContainer.style.display = "flex";
+                }
+            });
+        });
+        
+        dialogueChoicesContainer.appendChild(btn);
+    });
+    
+    dialogueChoicesContainer.style.display = "flex";
 }
 
 // Close dialogue
 function closeNpcDialogue() {
+    isNpcDialogueOpen = false; // FREE THE GUARD FLAG
     npcDialogueOverlay.style.display = "none";
     npcAvatar.style.display = "none";
-    if (typeTimeout) clearTimeout(typeTimeout);
+    dialogueChoicesContainer.style.display = "none";
+    dialogueChoicesContainer.innerHTML = "";
     
-    // Stop typewriter sound
+    if (typeTimeout) clearTimeout(typeTimeout);
     typewriterSound.pause();
     
-    // Restore realm message
+    // Restore realm message and restart the fade timer
     if (currentRealmId) {
         textboxText.textContent = realmMessages[currentRealmId] || "You have entered a new realm...";
+        startRealmMessageFade(); // This safely clears old timeouts and restarts the deletion animation
+    } else {
+        textboxText.textContent = "";
     }
 }
 
@@ -1172,28 +1467,35 @@ npcDialogueOverlay.addEventListener("click", (e) => {
 let realmMessageTimeout = null;
 
 function startRealmMessageFade() {
-    if (isNpcDialogueOpen) return;   // ← NEW: don't fade while NPC is talking
-    // Clear any existing timeout
+    // 1. Guard against NPC dialogue
+    if (isNpcDialogueOpen) return;   
+
+    // 2. Clear any existing timeout to prevent "stacking" deletes
     if (realmMessageTimeout) clearTimeout(realmMessageTimeout);
 
     realmMessageTimeout = setTimeout(() => {
+        // 3. Final check: did an NPC open while we were waiting 3 seconds?
+        if (isNpcDialogueOpen) return; 
+
         const currentText = textboxText.textContent.trim();
         if (!currentText) return;
 
-        // Backspace deletion animation (starts from the end)
         let text = currentText;
         let i = text.length;
 
         function deleteChar() {
+            // 4. Emergency stop if NPC is clicked DURING the backspace animation
+            if (isNpcDialogueOpen) return; 
+
             if (i > 0) {
                 text = text.slice(0, -1);
                 textboxText.textContent = text;
                 i--;
-                realmMessageTimeout = setTimeout(deleteChar, 25); // speed of deletion
+                realmMessageTimeout = setTimeout(deleteChar, 25);
             }
         }
         deleteChar();
-    }, 3000); // 3 seconds after entering realm
+    }, 3000); 
 }
 
 
