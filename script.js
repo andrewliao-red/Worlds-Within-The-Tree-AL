@@ -40,6 +40,12 @@ const frameProjected = document.getElementById("frame-projected");
 const framePhoto = document.getElementById("frame-photo");
 const frameClose = document.getElementById("frame-close");
 
+// Chest
+const treasureChest = document.getElementById("treasure-chest");
+const chestUI = document.getElementById("chest-ui");
+const chestClose = document.getElementById("chest-close");
+const chestPhoto = document.getElementById("chest-photo");
+
 // NEW: Book page system (Minecraft-style)
 const book = document.getElementById("book");
 
@@ -594,6 +600,8 @@ frameUI.addEventListener("click", (e) => {
 
 
 
+
+
 // ----- REALM SETTINGS -----
 const realmSettings = {
     w1: { 
@@ -719,26 +727,25 @@ function loadRealmPlatforms(realmId) {
         //addWall(650, 240, 30, 120, false);
         //addWall(1200, 240, 30, 120, false);
         
-        addPlatform(850, 135, 50, 10, true);
-        addPlatform(870, 146, 50, 10, true);
-        addPlatform(890, 157, 50, 10, true);
-        addPlatform(910, 168, 50, 10, true);
-        addPlatform(920, 179, 50, 10, true);
-        addPlatform(930, 190, 50, 10, true);
-        addPlatform(940, 201, 50, 10, true);
-        addPlatform(950, 212, 50, 10, true);
-        addPlatform(960, 223, 50, 10, true);
-        addPlatform(965, 234, 50, 10, true);
-
-        addPlatform(960, 245, 50, 10, true);
-        addPlatform(950, 256, 50, 10, true);
-        addPlatform(940, 267, 50, 10, true);
-        addPlatform(930, 278, 50, 10, true);
-        addPlatform(920, 289, 50, 10, true);
-        addPlatform(910, 300, 50, 10, true);
-        addPlatform(905, 311, 50, 10, true);
-        addPlatform(900, 322, 50, 10, true);
-        addPlatform(890, 333, 50, 10, true);
+        //addPlatform(850, 135, 50, 10, true);
+        //addPlatform(870, 146, 50, 10, true);
+        //addPlatform(890, 157, 50, 10, true);
+        //addPlatform(910, 168, 50, 10, true);
+        //addPlatform(920, 179, 50, 10, true);
+        //addPlatform(930, 190, 50, 10, true);
+        //addPlatform(940, 201, 50, 10, true);
+        //addPlatform(950, 212, 50, 10, true);
+        //addPlatform(960, 223, 50, 10, true);
+        //addPlatform(965, 234, 50, 10, true);
+        //addPlatform(960, 245, 50, 10, true);
+        //addPlatform(950, 256, 50, 10, true);
+        //addPlatform(940, 267, 50, 10, true);
+        //addPlatform(930, 278, 50, 10, true);
+        //addPlatform(920, 289, 50, 10, true);
+        //addPlatform(910, 300, 50, 10, true);
+        //addPlatform(905, 311, 50, 10, true);
+        //addPlatform(900, 322, 50, 10, true);
+        //addPlatform(890, 333, 50, 10, true);
     }
 
     // 🔴 IMPORTANT: render debug boxes after loading
@@ -792,6 +799,7 @@ worlds.forEach(world => {
     frame5.style.display = "none";
     lighthouse.style.display = "none";
     islandcabin.style.display = "none";
+    treasureChest.style.display = "none";
 
      // NEW: Hide all gateways
     gateway1.style.display = "none";
@@ -857,11 +865,12 @@ worlds.forEach(world => {
 
         fisherman.style.display = "block";
 
-
         // NEW: Show the duplicate Frame in World 5
         frame3.style.display = "block";
 
         gateway5.style.display = "block";   // NEW
+
+        treasureChest.style.display = "block";
 
     }
 
@@ -968,6 +977,41 @@ worlds.forEach(world => {
 
     });
 
+});
+
+// ----- CHEST HOVER HANDLERS -----
+treasureChest.addEventListener("mouseenter", () => {
+    treasureChest.src = "bgbimage/chesthover.png";
+});
+
+treasureChest.addEventListener("mouseleave", () => {
+    treasureChest.src = "bgbimage/chestidle.png";
+});
+
+// ----- CHEST CLICK HANDLERS -----
+treasureChest.addEventListener("click", (e) => {
+    e.stopImmediatePropagation();
+    // Optional: playClickSound();
+    chestUI.style.display = "flex"; 
+});
+
+// ----- CHEST CLOSE HANDLERS -----
+chestClose.addEventListener("click", (e) => {
+    e.stopImmediatePropagation();
+    // Optional: playClickSound();
+    chestUI.style.display = "none";
+    
+    // Optional: Reset scroll position to top for the next time it's opened
+    const wrapper = document.getElementById("chest-content-wrapper");
+    wrapper.scrollTop = 0; 
+});
+
+// Click on black overlay to close (matches your other UI mechanics)
+chestUI.addEventListener("click", (e) => {
+    if (e.target === chestUI) {
+        chestUI.style.display = "none";
+        document.getElementById("chest-content-wrapper").scrollTop = 0;
+    }
 });
 
 

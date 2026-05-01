@@ -1226,3 +1226,81 @@ h2 {
     box-shadow: 0 6px 12px rgba(255, 255, 255, 0.4);
     z-index: 1000;
 }
+
+
+/* ================== CHEST OBJECT ================== */
+#treasure-chest {
+    position: absolute;
+    /* Adjust these coordinates to place it perfectly on the World 5 island */
+    top: 549px; 
+    left: 1077px;
+    width: 80px; /* Adjust based on your sprite size */
+    z-index: 100;
+    cursor: pointer;
+    image-rendering: pixelated;
+    display: none; /* Managed by your realm switching logic */
+}
+
+/* ================== CHEST UI (Scrolling) ================== */
+#chest-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Dark background to focus on moodboard */
+    z-index: 2000; /* Ensure it's above everything */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+}
+
+#chest-content-wrapper {
+    position: relative;
+    width: 75%; /* Width of the scrolling window */
+    height: 80%; /* Height limit - stops it from bleeding off the physical screen */
+    background-color: #000;
+    border: 4px solid #444; /* Optional: gives the window a slight border */
+    overflow-y: auto; /* CRITICAL: This enables vertical scrolling! */
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+    border-radius: 4px;
+}
+
+#chest-content-photo {
+    width: 100%; /* Forces the image to fit the wrapper's width perfectly */
+    height: auto; /* Allows the height to stretch as far down as the image goes */
+    display: block; /* Removes standard bottom gap on images */
+}
+
+/* Optional: Custom styling for the scrollbar to make it look a bit more game-like */
+#chest-content-wrapper::-webkit-scrollbar {
+    width: 12px;
+}
+#chest-content-wrapper::-webkit-scrollbar-track {
+    background: #111; 
+}
+#chest-content-wrapper::-webkit-scrollbar-thumb {
+    background: #555; 
+    border-radius: 6px;
+}
+#chest-content-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #888; 
+}
+
+#chest-close {
+    position: absolute;
+    top: 25px;
+    right: 40px;
+    font-size: 50px;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 2001;
+    font-family: inherit; /* Matches your retro font */
+    transition: all 0.2s;
+    user-select: none; /* Prevents accidentally highlighting the arrow text */
+}
+
+#chest-close:hover {
+    color: #ffd700; /* Turns golden on hover */
+    transform: scale(1.1);
+}
