@@ -1290,7 +1290,7 @@ h2 {
 #chest-close {
     position: absolute;
     top: 25px;
-    right: 40px;
+    right: 1200px;
     font-size: 50px;
     color: #ffffff;
     cursor: pointer;
